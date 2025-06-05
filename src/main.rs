@@ -5,13 +5,17 @@ fn get_url(url: String) {
 }
 
 fn main() {
+    let message = "Lofi Playlist App";
+    println!("\n{}", message);
+
     let mut mood = String::new();
+
+    println!("Enter Message: ");
+    stdin().read_line(&mut mood).expect("No URL Defined");
     let mut is_appended: bool = false;
     let mut addedtofile = String::new();
 
-    while mood != "Sad" {
-        stdin().read_line(&mut mood).expect("No URL Defined");
-
+    while !is_appended {
         if mood.contains("Happy") {
             let mut url: String = String::new();
 
