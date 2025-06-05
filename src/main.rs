@@ -1,7 +1,20 @@
 use std::{ fs::File, io::{ stdin, Write } };
 
+use mongodb::{ bson::Document, options::ClientOptions, Client, Collection };
+
 fn get_url(url: String) {
     open::with(url, "chrome").unwrap();
+}
+
+#[tokio::main]
+async fn connect_mongo(m: String) {
+    let op = ClientOptions::parse("mongodb://localhost:27017").await?;
+    let client = mongodb::Client::with_options(op)?;
+    let message_code: Collection<Document> = client.database("URL").collection("URLS");
+    let m = message_code.find_one(m.as_bytes());
+    println!("Code: {}", message_code);
+
+    Ok(());
 }
 
 fn main() {
@@ -21,6 +34,8 @@ fn main() {
 
             println!("Enter URL: ");
             stdin().read_line(&mut url).expect("No URL Defined");
+
+            connect_mongo(url);
 
             println!("Want to Add to File: ");
             stdin().read_line(&mut addedtofile).expect("No URL Defined");
